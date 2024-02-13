@@ -15,18 +15,17 @@ public class Main {
         frame.addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {
-
+                panel.addKey(e.getKeyChar());
             }
 
             @Override
             public void keyPressed(KeyEvent e) {
-                panel.setCurKey(e.getKeyChar());
-                System.out.println(e.getKeyChar());
+
             }
 
             @Override
             public void keyReleased(KeyEvent e) {
-                panel.setCurKey('e');
+                panel.removeKey(e.getKeyChar());
             }
         });
         frame.add(panel);

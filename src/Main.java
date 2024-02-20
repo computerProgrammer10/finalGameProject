@@ -10,7 +10,7 @@ public class Main {
         // IntelliJ IDEA suggests fixing it.
         System.out.printf("Hello and welcome!");
         JFrame frame = new JFrame();
-        frame.setSize(500,500);
+        frame.setSize(600,600);
         MyPanel panel = new MyPanel();
         frame.addKeyListener(new KeyListener() {
             @Override

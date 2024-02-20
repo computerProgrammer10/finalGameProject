@@ -1,16 +1,16 @@
-import javax.swing.*;
 import java.awt.*;
-public class Character {
+public class Character extends ScreenObject {
     private String name;
-    private int x, y, size, speed;
+    private int speed;
 
     public boolean sprint;
     private Color color;
 
     private MyPanel panel;
     public Character(String name, MyPanel panel){
+        super(0,0,50);
         this.name = name; this.panel = panel;
-        x=0;y=0; size = 50; speed = 1; color = Color.RED; sprint = false;
+        speed = 1; color = Color.RED; sprint = false;
     }
 
     public void setSprint(){
@@ -19,22 +19,22 @@ public class Character {
 
     public void drawCircle(Graphics g){
         g.setColor(color);
-        g.fillOval(x,y,size,size);
+        g.fillOval(getX(),getY(),getSize(),getSize());
     }
     public void move(char key, Graphics g){
         int moveSpeed = speed;
         if (sprint) moveSpeed*=2;
         if (key=='w'){
-            y-= moveSpeed;
+            setY((getY() - moveSpeed));
         }
         if (key=='a'){
-            x-= moveSpeed;
+            setX((getX() - moveSpeed));
         }
         if (key=='s'){
-            y+= moveSpeed;
+            setY((getY() + moveSpeed));
         }
         if (key=='d'){
-            x+= moveSpeed;
+            setX((getX() + moveSpeed));
         }
     }
 }

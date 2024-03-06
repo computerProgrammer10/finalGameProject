@@ -10,7 +10,7 @@ public class Character extends ScreenObject {
     public Character(String name, MyPanel panel){
         super(0,0,50);
         this.name = name; this.panel = panel;
-        speed = 10; color = Color.RED; sprint = false;
+        speed = 5; color = Color.RED; sprint = false;
     }
 
     public void setSprint(){

@@ -21,21 +21,23 @@ public class MyPanel extends JPanel{
         obstacles = new ArrayList<Obstacle>();
         coins = new ArrayList<Coin>();
         for (int i = 0; i<2; i++){
-            obstacles.add(new Obstacle(randomInt(50,450),randomInt(50,450),randomInt(1,100)));
+            obstacles.add(new Obstacle(randomInt(50,450),randomInt(50,450),randomInt(10,100)));
         }
-        Coin coin = new Coin(randomInt(50,getWidth()-50), randomInt(50,getHeight()-50),randomInt(10,20),10);
-        while(true) {
-            boolean interferes = false;
-            for (Obstacle hi : obstacles) {
-                if (hi.collides(coin)) {
-                    interferes = true;
-                    coin = new Coin(randomInt(50, getWidth() - 50), randomInt(50, getHeight() - 50), randomInt(10, 20), 10);
-                    break;
+        for (int i = 0; i<10; i++) {
+            Coin coin = new Coin(randomInt(50, 450), randomInt(50, 450), randomInt(30, 50), 10);
+            while (true) {
+                boolean interferes = false;
+                for (Obstacle hi : obstacles) {
+                    if (hi.collides(coin)) {
+                        interferes = true;
+                        coin = new Coin(randomInt(50, getWidth() - 50), randomInt(50, getHeight() - 50), randomInt(30, 50), 10);
+                        break;
+                    }
                 }
+                if (!interferes) break;
             }
-            if (!interferes) break;
+            coins.add(coin);
         }
-        coins.add(coin);
         warningLabel = new JLabel();
         coinLabel = new JLabel();
         coinLabel.setText("Coins: 0");
@@ -89,21 +91,23 @@ public class MyPanel extends JPanel{
         obstacles = new ArrayList<Obstacle>();
         coins = new ArrayList<Coin>();
         for (int i = 0; i<2; i++){
-            obstacles.add(new Obstacle(randomInt(50,getWidth()-50),randomInt(50,getHeight()-50),randomInt(1,100)));
+            obstacles.add(new Obstacle(randomInt(50,getWidth()-50),randomInt(50,getHeight()-50),randomInt(10,100)));
         }
-        Coin coin = new Coin(randomInt(50,getWidth()-50), randomInt(50,getHeight()-50),randomInt(10,20),10);
-        while(true) {
-            boolean interferes = false;
-            for (Obstacle hi : obstacles) {
-                if (hi.collides(coin)) {
-                    interferes = true;
-                    coin = new Coin(randomInt(50, getWidth() - 50), randomInt(50, getHeight() - 50), randomInt(10, 20), 10);
-                    break;
+        for (int i = 0; i<2; i++) {
+            Coin coin = new Coin(randomInt(50, getWidth() - 50), randomInt(50, getHeight() - 50), randomInt(10, 20), 10);
+            while (true) {
+                boolean interferes = false;
+                for (Obstacle hi : obstacles) {
+                    if (hi.collides(coin)) {
+                        interferes = true;
+                        coin = new Coin(randomInt(50, getWidth() - 50), randomInt(50, getHeight() - 50), randomInt(30, 50), 10);
+                        break;
+                    }
                 }
+                if (!interferes) break;
             }
-            if (!interferes) break;
+            coins.add(coin);
         }
-        coins.add(coin);
     }
 
     @Override
@@ -145,16 +149,17 @@ public class MyPanel extends JPanel{
                         alive = false; break;
                     }
                 }
-                for (Coin bye: coins){
+                for (int i = 0; i<coins.size(); i++){
+                    Coin bye = coins.get(i);
                     if (bye.collides(character)){
                         // add a new obstacle first, make sure that it does not collide with the character
-                        Obstacle obstacle = new Obstacle(randomInt(50,getWidth()-50),randomInt(50,getHeight()-50),randomInt(1,100));
+                        Obstacle obstacle = new Obstacle(randomInt(50,getWidth()-50),randomInt(50,getHeight()-50),randomInt(10,100));
                         while (obstacle.collides(character)) {
-                            obstacle = new Obstacle(randomInt(50, getWidth() - 50), randomInt(50, getHeight() - 50), randomInt(1, 100));
+                            obstacle = new Obstacle(randomInt(50, getWidth() - 50), randomInt(50, getHeight() - 50), randomInt(10, 100));
                         }
                         obstacles.add(obstacle);
-                        coinCount+= 10; coins.remove(bye);
-                        Coin coin = new Coin(randomInt(50,getWidth()-50), randomInt(50,getHeight()-50),randomInt(10,20),10);
+                        coinCount+= 10;
+                        Coin coin = new Coin(randomInt(50,getWidth()-50), randomInt(50,getHeight()-50),randomInt(30,50),10);
                         while(true) {
                             boolean interferes = false;
                             for (Obstacle hi : obstacles) {
@@ -166,7 +171,7 @@ public class MyPanel extends JPanel{
                             }
                             if (!interferes) break;
                         }
-                        coins.add(coin);
+                        coins.set(i, coin);
                     }
                 }
 

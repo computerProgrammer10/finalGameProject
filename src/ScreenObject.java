@@ -2,7 +2,6 @@ import java.awt.*;
 
 public class ScreenObject {
     private int x, y, size;
-
     public ScreenObject(int x, int y, int size){
         this.x = x; this.y = y; this.size = size;
     }

@@ -20,10 +20,10 @@ public class MyPanel extends JPanel{
         character =  new Character("bob", this); curKeys = new char[0];
         obstacles = new ArrayList<Obstacle>();
         coins = new ArrayList<Coin>();
-        for (int i = 0; i<0; i++){
+        for (int i = 0; i<10; i++){
             obstacles.add(new Obstacle(randomInt(50,450),randomInt(50,450),randomInt(10,character.getSize())));
         }
-        for (int i = 0; i<0; i++) {
+        for (int i = 0; i<100; i++) {
             Coin coin = new Coin(randomInt(50, 450), randomInt(50, 450), randomInt(30, 50), 10);
             while (true) {
                 boolean interferes = false;

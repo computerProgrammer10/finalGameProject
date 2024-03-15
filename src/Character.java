@@ -1,7 +1,10 @@
+import javax.swing.*;
 import java.awt.*;
 public class Character extends ScreenObject {
     private String name;
     private int speed;
+
+//    private ImageIcon imageIcon = new ImageIcon("character.png");
 
     public boolean sprint;
     private Color color;

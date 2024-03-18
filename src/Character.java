@@ -4,7 +4,7 @@ public class Character extends ScreenObject {
     private String name;
     private int speed;
 
-//    private ImageIcon imageIcon = new ImageIcon("character.png");
+    private ImageIcon imageIcon = new ImageIcon("images/monkey.jpeg");
 
     public boolean sprint;
     private Color color;
@@ -13,7 +13,7 @@ public class Character extends ScreenObject {
     public Character(String name, MyPanel panel){
         super(0,0,50);
         this.name = name; this.panel = panel;
-        speed = 20; color = Color.RED; sprint = false;
+        speed = 5; color = Color.RED; sprint = false;
     }
 
     public void setSprint(){
@@ -22,7 +22,7 @@ public class Character extends ScreenObject {
 
     public void drawCircle(Graphics g){
         g.setColor(color);
-        g.fillOval(getX(),getY(),getSize(),getSize());
+        g.drawImage(imageIcon.getImage(), getX(),getY(),getSize(),getSize(), null);
     }
     public void move(char key, Graphics g, MyPanel panel){
         int moveSpeed = speed;

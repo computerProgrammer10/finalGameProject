@@ -17,21 +17,41 @@ public class MyPanel extends JPanel{
     private int timer = 0, coinCount, coinRequirement;
     private boolean alive;
 
+    private void createLevel(){
+        ArrayList<Obstacle> levelObstacles = new ArrayList<Obstacle>();
+        for (int o = 0; o < 10 * (levels.size() + 1); o++) {
+            levelObstacles.add(new Obstacle(randomInt(50, getWidth()-50), randomInt(50, getHeight()-50), 20));
+        }
+        Coin coin = new Coin(randomInt(50, getWidth()-50), randomInt(50, getHeight()-50), randomInt(30, 50), 10);
+        ArrayList<Coin> levelCoins = new ArrayList<Coin>();
+        while (true) {
+            boolean interferes = false;
+            for (Obstacle hi : levelObstacles) {
+                if (hi.collides(coin)) {
+                    interferes = true;
+                    coin = new Coin(randomInt(50, 450), randomInt(50, 450), randomInt(10, 20), 10);
+                    break;
+                }
+            }
+            if (!interferes) break;
+        }
+        levelCoins.add(coin);
+        levels.add(new Level(levelObstacles, levelCoins, 100*(levels.size()+1)));
+    }
+
     public void createLevels(){
-        // level 1
-        for (int i = 0; i<10; i++) {
             ArrayList<Obstacle> levelObstacles = new ArrayList<Obstacle>();
             for (int o = 0; o < 10 * (levels.size() + 1); o++) {
                 levelObstacles.add(new Obstacle(randomInt(50, 400), randomInt(50, 400), 20));
             }
-            Coin coin = new Coin(randomInt(50, getWidth() - 50), randomInt(50, getHeight() - 50), randomInt(30, 50), 10);
+            Coin coin = new Coin(randomInt(50, 450), randomInt(50, 450), randomInt(30, 50), 10);
             ArrayList<Coin> levelCoins = new ArrayList<Coin>();
             while (true) {
                 boolean interferes = false;
                 for (Obstacle hi : levelObstacles) {
                     if (hi.collides(coin)) {
                         interferes = true;
-                        coin = new Coin(randomInt(50, getWidth() - 50), randomInt(50, getHeight() - 50), randomInt(10, 20), 10);
+                        coin = new Coin(randomInt(50, 450), randomInt(50, 450), randomInt(10, 20), 10);
                         break;
                     }
                 }
@@ -39,7 +59,6 @@ public class MyPanel extends JPanel{
             }
             levelCoins.add(coin);
             levels.add(new Level(levelObstacles, levelCoins, 100*(levels.size()+1)));
-        }
     }
     public MyPanel(){
         levels = new ArrayList<Level>();
@@ -129,7 +148,10 @@ public class MyPanel extends JPanel{
                     if (!(curLevel + 1 > levels.size())){
                         curLevel++;
                         restartGame();
-                    }else restartGame();
+                    }else{
+                        createLevel();
+                        curLevel++;
+                        restartGame();}
                 }
                 coinLabel.setVisible(true);
                 coinLabel.setText("Coins: " + coinCount + "/" + coinRequirement);

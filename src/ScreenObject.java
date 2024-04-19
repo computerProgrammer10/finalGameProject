@@ -19,8 +19,10 @@ public class ScreenObject {
         return y+(size/2);
     }
 
+    public double getDistance(ScreenObject check){
+        return Math.sqrt(Math.pow(getCenterX() - check.getCenterX(), 2)+(Math.pow(getCenterY() - check.getCenterY(), 2)));
+    }
     public boolean collides(ScreenObject check){
-        double distance = Math.sqrt(Math.pow(getCenterX() - check.getCenterX(), 2)+(Math.pow(getCenterY() - check.getCenterY(), 2)));
-        return distance <= (getSize() + check.getSize()) / 2.0;
+        return getDistance(check) <= (getSize() + check.getSize()) / 2.0;
     }
 }

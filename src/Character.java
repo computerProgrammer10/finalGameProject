@@ -1,6 +1,8 @@
 import javax.swing.*;
 import java.awt.*;
 public class Character extends ScreenObject {
+
+    public static final int DEFAULT_SIZE = 50;
     private String name;
     private int speed;
 
@@ -10,10 +12,10 @@ public class Character extends ScreenObject {
     private Color color;
 
     private MyPanel panel;
-    public Character(String name, MyPanel panel){
-        super(0,0,50);
+    public Character(String name, MyPanel panel, int speed){
+        super(0,0,DEFAULT_SIZE);
         this.name = name; this.panel = panel;
-        speed = 5; color = Color.RED; sprint = false;
+        this.speed = speed; color = Color.RED; sprint = false;
     }
 
     public void setSprint(){
@@ -40,17 +42,17 @@ public class Character extends ScreenObject {
             setX((getX() + moveSpeed));
         }
 
-        if (getY()<= -getSize()) {
+        if (getY()< -getSize()) {
             setY(panel.getHeight());
         }
         if (getY()>panel.getHeight()){
-            setY(0);
+            setY(-getSize());
         }
-        if (getX()<= -getSize()) {
+        if (getX()< -getSize()) {
             setX(panel.getWidth());
         }
         if (getX()>panel.getWidth()){
-            setX(0);
+            setX(-getSize());
         }
     }
 }

@@ -14,7 +14,7 @@ public class MyPanel extends JPanel{
 
     private ArrayList<Level> levels; private int curLevel;
 
-    private int timer = 0, coinCount, coinRequirement;
+    private int timer = 0, coinCount, coinRequirement, gameMode;
     private boolean alive;
 
     private void createLevel() {
@@ -88,11 +88,12 @@ public class MyPanel extends JPanel{
             levelCoins.add(coin);
             levels.add(new Level(levelObstacles, levelCoins, 50*(levels.size()+1)));
     }
-    public MyPanel(){
+    public MyPanel(int gameMode){
         levels = new ArrayList<Level>();
         createLevels();
         curLevel = 1;
         setBackground(Color.LIGHT_GRAY);
+        this.gameMode = gameMode;
         this.coinCount = 0;
         character =  new Character("Bob", this, 5); curKeys = new char[0];
         obstacles = new ArrayList<>(levels.get(curLevel-1).getLevelObstacles());

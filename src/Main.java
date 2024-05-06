@@ -10,9 +10,9 @@ public class Main {
         JFrame startFrame = new JFrame();
         startFrame.setSize(600,600);
         JPanel defaultPanel = new JPanel();
-        JLabel startLabel = new JLabel("What game mode do you wanna play?", SwingConstants.CENTER);
+        JLabel startLabel = new JLabel("Hi!", SwingConstants.CENTER);
         defaultPanel.setLayout(new BorderLayout());
-        startLabel.setText("Which game mode do you want to play?");
+        startLabel.setText("Welcome to the game");
         startLabel.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 20));
 
         JButton button1 = new JButton(), button2 = new JButton();
@@ -31,16 +31,55 @@ public class Main {
                 frame.addKeyListener(new KeyListener() {
                     @Override
                     public void keyTyped(KeyEvent e) {
+                        if (e.getKeyChar()=='c' || e.getKeyChar()=='C'){
+                            panel.sprintCharacter(false);
+                        }
                         panel.addKey(e.getKeyChar());
                     }
 
                     @Override
                     public void keyPressed(KeyEvent e) {
-
                     }
 
 
                     public void keyReleased(KeyEvent e) {
+
+                        if (e.getKeyChar()=='c' || e.getKeyChar()=='C'){
+                            panel.sprintCharacter(true);
+                        }
+                        panel.removeKey(e.getKeyChar());
+                    }
+                });
+                frame.add(panel);
+                frame.setVisible(true);
+            }
+        });
+        button2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                startFrame.setVisible(false);
+                JFrame frame = new JFrame();
+                frame.setSize(600,600);
+                MyPanel panel = new MyPanel(0);
+                frame.addKeyListener(new KeyListener() {
+                    @Override
+                    public void keyTyped(KeyEvent e) {
+                        if (e.getKeyChar()=='c' || e.getKeyChar()=='C'){
+                            panel.sprintCharacter(false);
+                        }
+                        panel.addKey(e.getKeyChar());
+                    }
+
+                    @Override
+                    public void keyPressed(KeyEvent e) {
+                    }
+
+
+                    public void keyReleased(KeyEvent e) {
+
+                        if (e.getKeyChar()=='c' || e.getKeyChar()=='C'){
+                            panel.sprintCharacter(true);
+                        }
                         panel.removeKey(e.getKeyChar());
                     }
                 });

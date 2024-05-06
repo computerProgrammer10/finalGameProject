@@ -3,6 +3,7 @@ import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.Array;
 import java.util.ArrayList;
 
 import static java.lang.Character.toLowerCase;
@@ -89,16 +90,25 @@ public class MyPanel extends JPanel{
             levels.add(new Level(levelObstacles, levelCoins, 50*(levels.size()+1)));
     }
     public MyPanel(int gameMode){
-        levels = new ArrayList<Level>();
-        createLevels();
-        curLevel = 1;
+        this.gameMode = gameMode;
+        this.coinCount = 0;
+        if (gameMode == 1) {
+            levels = new ArrayList<Level>();
+            createLevels();
+            curLevel = 1;
+            obstacles = new ArrayList<>(levels.get(curLevel-1).getLevelObstacles());
+            coins = new ArrayList<>(levels.get(curLevel-1).getLevelCoins());
+            coinRequirement = levels.get(curLevel-1).getCoinsRequired();
+        }else{
+            obstacles = new ArrayList<Obstacle>();
+            coins = new ArrayList<Coin>();
+            Coin coin = new Coin(randomInt(50, 450), randomInt(50, 450), randomInt(30, 50), 10);
+            coins.add(coin);
+        }
         setBackground(Color.LIGHT_GRAY);
         this.gameMode = gameMode;
         this.coinCount = 0;
-        character =  new Character("Bob", this, 5); curKeys = new char[0];
-        obstacles = new ArrayList<>(levels.get(curLevel-1).getLevelObstacles());
-        coins = new ArrayList<>(levels.get(curLevel-1).getLevelCoins());
-        coinRequirement = levels.get(curLevel-1).getCoinsRequired();
+        character =  new Character("Bob", this, 2); curKeys = new char[0];
         warningLabel = new JLabel();
         coinLabel = new JLabel();
         coinLabel.setText("Coins: 0");
@@ -148,16 +158,25 @@ public class MyPanel extends JPanel{
 
     public void restartGame(){
         coinCount = 0;
-        if (curLevel%3==0) {
-            character = new Character("bob", this,20);
-        }else{
-            character = new Character("bob", this,5);
-        }
+        if(gameMode == 1) {
+            if (curLevel % 3 == 0) {
+                character = new Character("bob", this, 7);
+            } else {
+                character = new Character("bob", this, 2);
+            }
 
-        curKeys = new char[0];
-        obstacles = new ArrayList<>(levels.get(curLevel-1).getLevelObstacles());
-        coins = new ArrayList<>(levels.get(curLevel-1).getLevelCoins());
-        coinRequirement = levels.get(curLevel-1).getCoinsRequired();
+            curKeys = new char[0];
+            obstacles = new ArrayList<>(levels.get(curLevel - 1).getLevelObstacles());
+            coins = new ArrayList<>(levels.get(curLevel - 1).getLevelCoins());
+            coinRequirement = levels.get(curLevel - 1).getCoinsRequired();
+        }else{
+            character = new Character("bob", this, 2);
+            curKeys = new char[0];
+            obstacles = new ArrayList<Obstacle>();
+            coins = new ArrayList<Coin>();
+            Coin coin = new Coin(randomInt(50, getWidth() - 50), randomInt(50, getHeight() - 50), randomInt(30, 50), 10);
+            coins.add(coin);
+        }
     }
 
     @Override
@@ -165,7 +184,8 @@ public class MyPanel extends JPanel{
         super.paintComponent(g);
 //        System.out.println("Hi");
         if (timer != 0){
-            warningLabel.setText("Your score was " + coinCount + "/" + coinRequirement + " coins. Game restarting in " + ((int)(timer/1000)+1) + " seconds");
+            if (gameMode == 1) warningLabel.setText("Your score was " + coinCount + "/" + coinRequirement + " coins. Game restarting in " + ((int)(timer/1000)+1) + " seconds");
+            else warningLabel.setText("Your score was " + coinCount + " coins. Game restarting in "  + ((int)(timer/1000)+1) + " seconds");
             try {
                 Thread.sleep(10);
                 timer-= 10;
@@ -179,38 +199,41 @@ public class MyPanel extends JPanel{
             repaint();
         }else if (this.getHeight()>499 && this.getWidth()>499){
             if(alive) {
-                if (coinCount>=coinRequirement){
-                    if (!(curLevel + 1 > levels.size())){
-                        curLevel++;
-                        restartGame();
-                    }else{
-                        createLevel();
-                        curLevel++;
-                        restartGame();}
-                }
-                coinLabel.setVisible(true);
-                coinLabel.setText("Coins: " + coinCount + "/" + coinRequirement);
-                warningLabel.setText("Level: " + curLevel);
-                for (Obstacle hey : obstacles) {
-                    hey.drawObstacle(g);
-                }
-                for (Coin wuh : coins){
-                    wuh.drawCircle(g);
-                }
-                for (char curKey : curKeys) {
-                    character.move(curKey, g, this);
-                }
-                character.drawCircle(g);
-
-                for (Obstacle hi: obstacles){
-                    if (character.collides(hi)){
-                        alive = false; break;
+                if(gameMode == 1) {
+                    if (coinCount >= coinRequirement) {
+                        if (!(curLevel + 1 > levels.size())) {
+                            curLevel++;
+                            restartGame();
+                        } else {
+                            createLevel();
+                            curLevel++;
+                            restartGame();
+                        }
                     }
-                }
-                for (int i = 0; i<coins.size(); i++){
-                    Coin bye = coins.get(i);
-                    if (bye.collides(character)){
-                        // add a new obstacle first, make sure that it does not collide with the character
+                    coinLabel.setVisible(true);
+                    coinLabel.setText("Coins: " + coinCount + "/" + coinRequirement);
+                    warningLabel.setText("Level: " + curLevel);
+                    for (Obstacle hey : obstacles) {
+                        hey.drawObstacle(g);
+                    }
+                    for (Coin wuh : coins) {
+                        wuh.drawCircle(g);
+                    }
+                    for (char curKey : curKeys) {
+                        character.move(curKey, g, this);
+                    }
+                    character.drawCircle(g);
+
+                    for (Obstacle hi : obstacles) {
+                        if (character.collides(hi)) {
+                            alive = false;
+                            break;
+                        }
+                    }
+                    for (int i = 0; i < coins.size(); i++) {
+                        Coin bye = coins.get(i);
+                        if (bye.collides(character)) {
+                            // add a new obstacle first, make sure that it does not collide with the character
 //                        Obstacle obstacle = new Obstacle(randomInt(50,getWidth()-50),randomInt(50,getHeight()-50),randomInt(10,character.getSize()));
 //                        boolean huh = true;
 //                        for (Coin hi: coins) {
@@ -228,31 +251,109 @@ public class MyPanel extends JPanel{
 //                            }
 //                        }
 //                        obstacles.add(obstacle);
-                        coinCount+= 10;
-                        Coin coin = new Coin(randomInt(50,getWidth()-50), randomInt(50,getHeight()-50),randomInt(30,50),10);
-                        while(true) {
-                            boolean interferes = false;
-                            for (Obstacle hi : obstacles) {
-                                if (coin.collides(hi)) {
-                                    interferes = true;
-                                    coin = new Coin(randomInt(50, getWidth() - 50), randomInt(50, getHeight() - 50), randomInt(10, 20), 10);
-                                    break;
+                            coinCount += 10;
+                            Coin coin = new Coin(randomInt(50, getWidth() - 50), randomInt(50, getHeight() - 50), randomInt(30, 50), 10);
+                            while (true) {
+                                boolean interferes = false;
+                                for (Obstacle hi : obstacles) {
+                                    if (coin.collides(hi)) {
+                                        interferes = true;
+                                        coin = new Coin(randomInt(50, getWidth() - 50), randomInt(50, getHeight() - 50), randomInt(10, 20), 10);
+                                        break;
+                                    }
+                                }
+                                if (!interferes) break;
+                            }
+                            coins.set(i, coin);
+                        }
+                    }
+
+
+                    try {
+                        Thread.sleep(10);
+                    } catch (Exception e) {
+                        System.out.println(e);
+                    }
+                    repaint();
+
+                }else{
+                    coinLabel.setVisible(true);
+                    coinLabel.setText("Coins: " + coinCount);
+                    warningLabel.setText("");
+                    for (Obstacle hey : obstacles) {
+                        hey.drawObstacle(g);
+                    }
+                    for (Coin wuh : coins) {
+                        wuh.drawCircle(g);
+                    }
+                    for (char curKey : curKeys) {
+                        character.move(curKey, g, this);
+                    }
+                    character.drawCircle(g);
+
+                    for (Obstacle hi : obstacles) {
+                        if (character.collides(hi)) {
+                            alive = false;
+                            break;
+                        }
+                    }
+                    for (int i = 0; i < coins.size(); i++) {
+                        Coin bye = coins.get(i);
+                        if (bye.collides(character)) {
+                            // add a new obstacle first, make sure that it does not collide with the character
+                        Obstacle obstacle = new Obstacle(randomInt(50,getWidth()-50),randomInt(50,getHeight()-50),randomInt(10,character.getSize()));
+                        boolean huh = true;
+                        for (Coin hi: coins) {
+                            if (obstacle.collides(hi)) {
+                                huh = false;
+                            }
+                        }
+                            for (Obstacle hi: obstacles){
+                                if (hi.collides(obstacle)) {
+                                    huh = false;
                                 }
                             }
-                            if (!interferes) break;
+                        while (obstacle.collides(character) || !huh) {
+                            obstacle = new Obstacle(randomInt(50, getWidth() - 50), randomInt(50, getHeight() - 50), randomInt(10, character.getSize()));
+                            huh = true;
+                            for (Coin hi: coins) {
+                                if (obstacle.collides(hi)) {
+                                    huh = false;
+                                }
+                            }
+                            for (Obstacle hi: obstacles){
+                                if (hi.collides(obstacle)) {
+                                    huh = false;
+                                }
+                            }
                         }
-                        coins.set(i, coin);
+
+                        obstacles.add(obstacle);
+                            coinCount += 10;
+                            Coin coin = new Coin(randomInt(50, getWidth() - 50), randomInt(50, getHeight() - 50), randomInt(30, 50), 10);
+                            while (true) {
+                                boolean interferes = false;
+                                for (Obstacle hi : obstacles) {
+                                    if (hi.collides(coin)) {
+                                        interferes = true;
+                                        coin = new Coin(randomInt(50, getWidth() - 50), randomInt(50, getHeight() - 50), randomInt(10, 20), 10);
+                                        break;
+                                    }
+                                }
+                                if (!interferes) break;
+                            }
+                            coins.set(i, coin);
+                        }
                     }
+
+
+                    try {
+                        Thread.sleep(10);
+                    } catch (Exception e) {
+                        System.out.println(e);
+                    }
+                    repaint();
                 }
-
-
-                try {
-                    Thread.sleep(10);
-                } catch (Exception e) {
-                    System.out.println(e);
-                }
-                repaint();
-
             }else{
                 coinLabel.setVisible(false);
                 timer = 5000;
@@ -277,4 +378,7 @@ public class MyPanel extends JPanel{
     }
 
 
+    public void sprintCharacter(boolean b) {
+        character.setSprint(b);
+    }
 }

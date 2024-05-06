@@ -15,11 +15,11 @@ public class Character extends ScreenObject {
     public Character(String name, MyPanel panel, int speed){
         super(0,0,DEFAULT_SIZE);
         this.name = name; this.panel = panel;
-        this.speed = speed; color = Color.RED; sprint = false;
+        this.speed = speed; color = Color.RED; sprint = true;
     }
 
-    public void setSprint(){
-        sprint = !sprint;
+    public void setSprint(boolean sprint){
+        this.sprint = sprint;
     }
 
     public void drawCircle(Graphics g){
@@ -28,7 +28,7 @@ public class Character extends ScreenObject {
     }
     public void move(char key, Graphics g, MyPanel panel){
         int moveSpeed = speed;
-        if (sprint) moveSpeed*=2;
+        if (sprint) moveSpeed*=3;
         if (key=='w'){
             setY((getY() - moveSpeed));
         }

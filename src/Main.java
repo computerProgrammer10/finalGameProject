@@ -6,20 +6,24 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 public class Main {
-    public static void main(String[] args) {
+    public static void startGame(){
         JFrame startFrame = new JFrame();
         startFrame.setSize(600,600);
         JPanel defaultPanel = new JPanel();
+        defaultPanel.setBackground(Color.pink);
         JLabel startLabel = new JLabel("Hi!", SwingConstants.CENTER);
+        JLabel infoLabel = new JLabel("Hint: Hold C to go slower, Y to exit", SwingConstants.CENTER);
         defaultPanel.setLayout(new BorderLayout());
-        startLabel.setText("Welcome to the game");
+        startLabel.setText("Hi! Welcome to the game");
         startLabel.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 20));
+        infoLabel.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 20));
 
         JButton button1 = new JButton(), button2 = new JButton();
         JPanel centerPanel = new JPanel();
+        centerPanel.setBackground(Color.pink);
         button1.setText("Levels");
         button2.setText("Infinite");
-        defaultPanel.add(startLabel, BorderLayout.NORTH); centerPanel.add(button1); centerPanel.add(button2); defaultPanel.add(centerPanel, BorderLayout.CENTER);
+        defaultPanel.add(startLabel, BorderLayout.NORTH); defaultPanel.add(infoLabel, BorderLayout.SOUTH); centerPanel.add(button1); centerPanel.add(button2); defaultPanel.add(centerPanel, BorderLayout.CENTER);
         startFrame.add(defaultPanel); startFrame.setVisible(true);
         button1.addActionListener(new ActionListener() {
             @Override
@@ -27,7 +31,7 @@ public class Main {
                 startFrame.setVisible(false);
                 JFrame frame = new JFrame();
                 frame.setSize(600,600);
-                MyPanel panel = new MyPanel(1);
+                MyPanel panel = new MyPanel(1, frame);
                 frame.addKeyListener(new KeyListener() {
                     @Override
                     public void keyTyped(KeyEvent e) {
@@ -60,7 +64,7 @@ public class Main {
                 startFrame.setVisible(false);
                 JFrame frame = new JFrame();
                 frame.setSize(600,600);
-                MyPanel panel = new MyPanel(0);
+                MyPanel panel = new MyPanel(0,frame);
                 frame.addKeyListener(new KeyListener() {
                     @Override
                     public void keyTyped(KeyEvent e) {
@@ -87,5 +91,8 @@ public class Main {
                 frame.setVisible(true);
             }
         });
+    }
+    public static void main(String[] args) {
+        startGame();
     }
 }

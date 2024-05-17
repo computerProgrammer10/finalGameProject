@@ -12,7 +12,7 @@ public class Main {
         JPanel defaultPanel = new JPanel();
         defaultPanel.setBackground(Color.pink);
         JLabel startLabel = new JLabel("Hi!", SwingConstants.CENTER);
-        JLabel infoLabel = new JLabel("Hint: Hold C to go slower, Y to exit", SwingConstants.CENTER);
+        JLabel infoLabel = new JLabel("Hint: Hold C to go slower, Y to exit the game", SwingConstants.CENTER);
         defaultPanel.setLayout(new BorderLayout());
         startLabel.setText("Hi! Welcome to the game");
         startLabel.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 20));
